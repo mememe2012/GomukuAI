@@ -1,0 +1,38 @@
+{
+    "defaults": {
+        "colours": {
+            "normal_bg": "#dddddd",
+            "hovered_bg": "#777777",
+            "disabled_bg": "#333333",
+            "normal_text": "#000000",
+            "hovered_text": "#222222"
+        }
+    },
+    "button": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5",
+            "border_width": "2"
+        },
+        "font": {
+            "name": "HarmonyOS_Sans_SC",
+            "size": 20
+        }
+    },
+    "checkbox": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5",
+            "border_width": "2"
+        },
+        "font": {
+            "name": "HarmonyOS_Sans_SC",
+            "size": 20
+        }
+    },
+    "UIstyle": {
+        "fontcolor":"#ffffff",
+        "maskcolor":[255,255,255,64],
+        "bg" : "dark.png"
+    }
+}

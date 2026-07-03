@@ -1,0 +1,23 @@
+{
+    "theme": {
+        "default": "dark",
+        "system": true
+    },
+    "lang": {
+        "default": "zh-CN"
+    },
+    "volume": {
+        "main": 0.0,
+        "bg": 0.0,
+        "effect": 0.0,
+        "chess": true,
+        "enable": false
+    },
+    "closed": {
+        "choices": [
+            "Exit the program",
+            "Minimize to System Tray"
+        ],
+        "default": "exit"
+    }
+}

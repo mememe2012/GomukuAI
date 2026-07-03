@@ -1,7 +1,63 @@
-# 中文
-## 协议
-me12[作者]:
-1. 本工具只提供于学习，不得用于不当途径
-2. 一切解释权归作者所有
-3. MIT LICENSE
-4. 当您使用本工具时，您已同意所有协议
+# MIT License
+
+## Copyright (c) 2026 mememe2012
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+# Github
+![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
+![Python](https://img.shields.io/badge/language-Python-blue.svg?style=flat-square)
+**https://github.com/mememe2012/GomukuAI**
+[Github](https://github.com/mememe2012/GomukuAI)
+
+# Software
+![GomokuAI](icon/icon144.png)
+
+# Requirements
+![Pygame](https://img.shields.io/badge/Pygame-1.9.6-blue.svg?style=flat-square)
+![Pygame-gui](https://img.shields.io/badge/Pygame%20GUI-0.9.0-blue.svg?style=flat-square)
+
+# Learn More
+## Contributors
+**https://github.com/mememe2012/GomokuAI/graphs/contributors**  
+[Contributors](https://github.com/mememe2012/GomukuAI/graphs/contributors)  
+1. [mememe2012](https://github.com/mememe2012)  
+
+## README
+**https://github.com/mememe2012/GomukuAI/blob/main/README.md**  
+[README](https://github.com/mememe2012/GomukuAI/blob/main/README.md)  
+
+## Wiki
+**https://github.com/mememe2012/GomukuAI/wiki**  
+[Wiki](https://github.com/mememe2012/GomukuAI/wiki)  
+
+## Issues
+**https://github.com/mememe2012/GomukuAI/issues**  
+[Issues](https://github.com/mememe2012/GomukuAI/issues)  
+
+## Releases
+**https://github.com/mememe2012/GomukuAI/releases**  
+[Releases](https://github.com/mememe2012/GomukuAI/releases)  
+
+     'Y8888888'      '88Y'    'Y88'     'Y8   'Y8'         'Y888Y'         'Y8888Y'  
+     8Y      Y8'     '888Y'  'Y888'      88 'Y88'        '8888 8888'         'Y8'  
+     88              '88Y'8Y Y8'88'      8888Y'         'Y88'   '88Y'        '88'  
+     8Y   8888Y'     '88Y  8Y8  8Y'      88 88Y'       '88Y'Y888Y'Y88'       '88'  
+     88Y    8'8'     '88Y  8Y8  8Y'      88  Y88'      '8Y8'     '8Y8'       '8Y'  
+     'Y8888Y '8'     '888  8Y8  88'      88'  'Y8'     '8Y8'     '8Y8'     'Y8888Y'  
