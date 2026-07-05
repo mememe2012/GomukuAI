@@ -1,5 +1,5 @@
 {
-    "__name__" : "zh-CN",
+    "__name__" : "简体中文(中国大陆)",
     "Settings": "设置",
     "Exit": "退出",
     "View on GitHub": "Github仓库",
@@ -17,7 +17,7 @@
     "Setting" : "设置",
     "Page Up ↑" : "上一页 ↑",
     "Page Down ↓" : "下一页 ↓",
-    "Save" : "保存",
+    "Chess Library" : "棋谱库",
     "Language" : "语言",
     "Theme" : "主题",
     "dark" : "深色",
@@ -38,5 +38,14 @@
     "Background Music Volume" : "背景音乐音量",
     "Effect Volume" : "音效音量",
     "Chess Volume" : "棋子音量",
-    "Enable Sound" : "启用音效"
+    "Enable Sound" : "启用音效",
+    "Quit" : "退出",
+    "Hide" : "隐藏",
+    "Open" : "打开",
+    "GomokuAI is already inited!\nYou can find it in System Tray!" : "GomokuAI 已经初始化！\n你可以在系统托盘中找到它。",
+    "The program is minimize to the system tray. You can open or quit this program in the system tray." : "程序已经最小化到系统托盘。你可以在系统托盘中打开或退出这个程序。",
+    "Quit the Program sucessfully." : "成功退出程序。",
+    "When the window is closed" : "当窗口关闭时",
+    "Enable" : "启用",
+    "Disable" : "禁用"
 }

@@ -1,11 +1,12 @@
 {
     "defaults": {
         "colours": {
-            "normal_bg": "#dddddd",
-            "hovered_bg": "#777777",
-            "disabled_bg": "#333333",
-            "normal_text": "#000000",
-            "hovered_text": "#222222"
+            "normal_bg": "#22222288",
+            "hovered_bg": "#88888888",
+            "disabled_bg": "#bbbbbb88",
+            "normal_text": "#ffffff",
+            "normal_border": "#ffffff88",
+            "hovered_text": "#dddddd88"
         }
     },
     "button": {
@@ -16,19 +17,21 @@
         },
         "font": {
             "name": "HarmonyOS_Sans_SC",
-            "size": 20
+            "size": "16"
         }
     },
-    "checkbox": {
+    "check_box": {
         "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "5",
-            "border_width": "2"
-        },
-        "font": {
-            "name": "HarmonyOS_Sans_SC",
-            "size": 20
+            "border_width": "2",
+            "check_symbol": "+"
         }
+    },
+    "drop_down_menu": {
+        "colours":{
+            "dark_bg":"#22222288"
+        }  
     },
     "UIstyle": {
         "fontcolor":"#ffffff",

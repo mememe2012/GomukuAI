@@ -18,6 +18,6 @@
             "Exit the program",
             "Minimize to System Tray"
         ],
-        "default": "exit"
+        "default": 0
     }
 }

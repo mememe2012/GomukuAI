@@ -23,7 +23,13 @@ SOFTWARE.
 # Github
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![Python](https://img.shields.io/badge/language-Python-blue.svg?style=flat-square)
-**https://github.com/mememe2012/GomukuAI**
+![License](https://img.shields.io/github/license/mememe2012/GomukuAI.svg?style=flat-square)
+![version](https://img.shields.io/badge/version-0.0.1-blue.svg?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/mememe2012/GomukuAI.svg?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/mememe2012/GomukuAI.svg?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/mememe2012/GomukuAI.svg?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/mememe2012/GomukuAI.svg?style=flat-square)
+**https://github.com/mememe2012/GomukuAI**  
 [Github](https://github.com/mememe2012/GomukuAI)
 
 # Software
