@@ -23,7 +23,6 @@ SOFTWARE.
 # Github
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![Python](https://img.shields.io/badge/language-Python-blue.svg?style=flat-square)
-![License](https://img.shields.io/github/license/mememe2012/GomukuAI.svg?style=flat-square)
 ![version](https://img.shields.io/badge/version-0.0.1-blue.svg?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mememe2012/GomukuAI.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues/mememe2012/GomukuAI.svg?style=flat-square)
@@ -36,8 +35,13 @@ SOFTWARE.
 ![GomokuAI](icon/icon144.png)
 
 # Requirements
-![Pygame](https://img.shields.io/badge/Pygame-1.9.6-blue.svg?style=flat-square)
-![Pygame-gui](https://img.shields.io/badge/Pygame%20GUI-0.9.0-blue.svg?style=flat-square)
+![Pygame](https://img.shields.io/badge/Pygame-blue.svg?style=flat-square)
+![Pygame-gui](https://img.shields.io/badge/Pygame%20GUI-blue.svg?style=flat-square)
+![Numpy](https://img.shields.io/badge/Numpy-blue.svg?style=flat-square)
+![Pillow](https://img.shields.io/badge/PIL-blue.svg?style=flat-square)
+![Rich](https://img.shields.io/badge/Rich-blue.svg?style=flat-square)
+![Pystray](https://img.shields.io/badge/Pystray-blue.svg?style=flat-square)
+![Notifypy](https://img.shields.io/badge/Notify-blue.svg?style=flat-square)
 
 # Learn More
 ## Contributors

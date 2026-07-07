@@ -1,0 +1,7 @@
+pygame
+numpy
+pygame_gui
+Pillow
+rich
+pystray
+notifypy
