@@ -10,7 +10,6 @@
     "Issues" : "问题",
     "GomokuAI-Issues" : "GomokuAI-问题",
     "Do you want to open the issues in your browser?" : "你想要在浏览器中打开“问题”吗？",
-    "← Back" : "← 返回",
     "Check Update" : "检查更新",
     "Play Gomoku" : "开始五子棋",
     "Play Gomoku Online" : "在线五子棋",
@@ -47,5 +46,10 @@
     "Quit the Program sucessfully." : "成功退出程序。",
     "When the window is closed" : "当窗口关闭时",
     "Enable" : "启用",
-    "Disable" : "禁用"
+    "Disable" : "禁用",
+    "Render" : "渲染",
+    "Latest Step(Point)" : "最新一步(点)",
+    "Latest Step(Number)" : "最新一步(序号)",
+    "All Steps" : "所有落子",
+    "Clear" : "清空"
 }

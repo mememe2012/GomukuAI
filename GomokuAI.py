@@ -19,6 +19,7 @@ import ctypes
 import ctypes.wintypes as wintypes
 import pystray
 from notifypy import Notify
+import zipfile
 
 CONSOLE = Console()
 SIZE = (1024, 768)
@@ -193,7 +194,7 @@ def CreateScreen(
         title:str="Pygame Window",
         icon:str=None
         ) -> pg.Surface:
-    screen = pg.display.set_mode(size)
+    screen = pg.display.set_mode(size, pg.SRCALPHA)
     pg.display.set_caption(title)
     if icon:
         icon_surface = pg.image.load(icon)
@@ -255,6 +256,189 @@ def HideWindow(hwnd):
 def ShowWindow(hwnd):
     ctypes.windll.user32.ShowWindow(hwnd, 5)
 
+class GomokuBoard:
+    def __init__(self, 
+                 screen: pg.Surface, 
+                 font, 
+                 x, y, 
+                 padding=20, 
+                 cell=35, 
+                 border_radius=4, 
+                 chess_radius=16, 
+                 size=15
+                 ):
+        """
+        0 - empty
+        1 - black
+        2 - white
+        """
+        self.screen = screen
+        self.size = size
+        self.x = x
+        self.y = y
+        self.padding = padding
+        self.cell = cell
+        self.border_radius = border_radius
+        self.chess_radius = chess_radius
+        self.font = font
+        self.select_radius = 6
+        self.star_radius = 4
+        self.board_lst = []
+        self.board = [[0 for _ in range(self.size)] for _ in range(self.size)]
+        self.colors = {
+            "board" : "#dcb35c",
+            "line" : "#000000",
+            "black" : "#000000",
+            "white" : "#ffffff",
+            "select" : "#ff0000",
+            "star" : "#000000"
+        }
+        self.board_width = self.cell * (self.size - 1) + self.padding * 2
+        self.board_height = self.cell * (self.size - 1) + self.padding * 2
+        self.alpha = 50
+        self.star_pos = [
+            (3,3),
+            (11,3),
+            (3,11),
+            (11,11),
+            (7,7)
+        ]
+        self.alpha_chess = None
+        self.select_mode = 2 # 0 - latest(Point), 1 - latest(number), 2 - all(number)
+
+    def LstToBoard(self, lst):
+        self.board = [[0 for _ in range(self.size)] for _ in range(self.size)]
+        for i, pos in enumerate(lst):
+            self.board[pos[1]][pos[0]] = i % 2 + 1
+
+    def DrawBoard(self):
+        pg.draw.rect(
+                    self.screen,
+                    self.colors["board"],
+                    pg.Rect(
+                        self.x,
+                        self.y,
+                        self.board_width,
+                        self.board_height
+                        ),
+                    border_radius=self.border_radius
+                    )
+        
+        for i in range(self.size):
+            pg.draw.line(
+                self.screen,
+                self.colors["line"],
+                self.IndexPixel((0, i)),
+                self.IndexPixel((self.size - 1, i))
+                )
+            
+            pg.draw.line(
+                self.screen,
+                self.colors["line"],
+                self.IndexPixel((i, 0)),
+                self.IndexPixel((i, self.size - 1))
+                )
+            
+    def DrawStars(self):
+        for pos in self.star_pos:
+            ix, iy = pos
+            pg.draw.circle(
+                self.screen,
+                self.colors["star"],
+                self.IndexPixel((ix, iy)),
+                self.star_radius
+                )
+            
+    def DrawChess(self):
+        self.LstToBoard(self.board_lst)
+        for i, pos in enumerate(self.board_lst):
+            x, y = pos
+            if i % 2 == 0:
+                pg.draw.circle(
+                    self.screen,
+                    self.colors["black"],
+                    self.IndexPixel((x, y)),
+                    self.chess_radius
+                    )
+            else:
+                pg.draw.circle(
+                    self.screen,
+                    self.colors["white"],
+                    self.IndexPixel((x, y)),
+                    self.chess_radius
+                    )
+                
+            if self.select_mode == 0:
+                if i == len(self.board_lst) - 1:
+                    pg.draw.circle(
+                        self.screen,
+                        self.colors["select"],
+                        self.IndexPixel((x, y)),
+                        self.select_radius
+                        )
+            elif self.select_mode == 1:
+                if i == len(self.board_lst) - 1:
+                    self.blitCenter(
+                        LoadFont(self.font, 14).render(
+                                str(i+1), 
+                                True, 
+                                self.colors["select"]
+                            ), 
+                            self.IndexPixel((x, y))
+                        )
+
+            else:
+                self.blitCenter(
+                    LoadFont(self.font, 14).render(
+                            str(i+1), 
+                            True, 
+                            self.colors["select"] if i == len(self.board_lst) - 1 else self.colors["black"] if i % 2 else self.colors["white"]
+                        ), 
+                        self.IndexPixel((x, y))
+                    )
+                
+        if self.alpha_chess:
+            cx, cy = self.alpha_chess
+            pg.draw.circle(
+                self.screen, 
+                self.colors["black"] + str(self.alpha) if not len(self.board_lst) % 2 else self.colors["white"] + str(self.alpha), 
+                self.IndexPixel((cx, cy)), 
+                self.chess_radius
+            )
+
+    def GetSurfaceSize(self, surface: pg.Surface):
+        return (surface.get_width(), surface.get_height())
+    
+    def blitCenter(self, surface: pg.Surface, pos: tuple[int, int]):
+        x, y = pos
+        w, h = self.GetSurfaceSize(surface)
+        self.screen.blit(surface, (x - w // 2, y - h // 2))
+
+    def render(self):
+        self.DrawBoard()
+        self.DrawStars()
+        self.DrawChess()
+
+    def GetGrid(self, pos: tuple[int, int]):
+        bx, by = pos[0] - self.x - self.padding, pos[1] - self.y - self.padding
+        cx, cy = round(bx / self.cell), round(by / self.cell)
+        if cx >= 0 and cx < self.size and cy >= 0 and cy < self.size:
+            return (cx, cy)
+        return None
+
+    def IndexPixel(self, index: tuple[int, int]):
+        mx = self.x + self.padding + index[0] * self.cell
+        my = self.y + self.padding + index[1] * self.cell
+        return (mx, my)
+    
+    def SaveBoard(self, path):
+        array = np.array(self.board_lst, dtype=np.uint8)
+        np.save(path, array)
+
+    def LoadBoard(self, path):
+        array = np.load(path, allow_pickle=True)
+        self.board_lst = array.tolist()
+
 class Main:
     def __init__(self):
         pg.init()
@@ -263,7 +447,6 @@ class Main:
         pg.mixer.init()
         #pg.freetype.init()
 
-        self.loadConfig()
         self.running = True
         self.setting_page = 1
         self.setting_max_page = 2
@@ -276,15 +459,29 @@ class Main:
         self.font_family = "HarmonyOS_Sans_SC"
         self.version = "0.0.1"
         self.url = "https://github.com/mememe2012/GomukuAI"
-        self.sound = {}
+        self.bgm_list = os.listdir("sounds/bgm")
         self.hwnd = GetHWND()
         os.makedirs("tmp", exist_ok=True)
         with open("tmp/HWND.key", "w", encoding="utf-8") as f:
             f.write(str(self.hwnd))
-        self.chessboard = self.ChessBoard(self, 414, 10, 600)
-        self.chessboard.boardlst = [(1,1),(2,3),(8,1)]
+        
+        self.gmk_board = GomokuBoard(self.screen, self.fontpath, 10, 70)
+        
+        self.loadConfig()
 
         CONSOLE.print(f"Window HWND={self.hwnd}", style="yellow")
+
+    def GetSurfaceSize(self, surface: pg.Surface):
+        return (surface.get_width(), surface.get_height())
+    
+    def playSound(self, name: str, loop: int = 0):
+        if self.config["volume"]["enable"]:
+            self.sound[name].play(loop)
+    
+    def blitCenter(self, surface: pg.Surface, pos: tuple[int, int]):
+        x, y = pos
+        w, h = self.GetSurfaceSize(surface)
+        self.screen.blit(surface, (x - w // 2, y - h // 2))
 
     def SetupStray(self, icon):
         icon.visible = True
@@ -331,6 +528,18 @@ class Main:
             with open("lang/" + lang + ".json", "r", encoding="utf-8") as f:
                 self.lang_dct[lang] = json.load(f)["__name__"]
 
+        self.gmk_board.select_mode = self.config["select"]["default"]
+        
+        self.sound = {
+            "click1" : pg.mixer.Sound("sounds/click1.wav"),
+            "down1" : pg.mixer.Sound("sounds/down1.wav"),
+            "info1" : pg.mixer.Sound("sounds/info1.wav")
+        }
+
+        self.sound["click1"].set_volume(self.config["volume"]["effect"] * self.config["volume"]["main"])
+        self.sound["down1"].set_volume(self.config["volume"]["effect"] * self.config["volume"]["main"])
+        self.sound["info1"].set_volume(self.config["volume"]["effect"] * self.config["volume"]["main"])
+
     def loadTheme(self, style):
         self.theme_path = f"themes/{style}.json"
         with open(f"themes/{style}.json", "r") as f:
@@ -340,7 +549,7 @@ class Main:
     def writeLog(self, text):
         if not os.path.exists("log"):
             os.makedirs("log")
-            
+
         with open("log/"+self.logname, "a", encoding="utf-8") as f:
             f.write(f"[{time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())}]{text}" + "\n")
 
@@ -364,8 +573,8 @@ class Main:
                 CONSOLE.print("unknown file", self.filepath, style="red")
                 self.running = False
 
-        CONSOLE.print(Panel(f"[bold green]{self.gmktxt}\nSuccessful to init GomokuAI![/bold green]", title="Init"))
-        self.writeLog(f"{self.gmktxt}\nSuccessful to init GomokuAI!")
+        CONSOLE.print(f"{self.gmktxt}", style="bold green")
+        self.writeLog(f"\n{self.gmktxt}")
 
         WinMessage("GomokuAI",self.tr("GomokuAI is already inited!\nYou can find it in System Tray!"),"icon/icon144.png")
 
@@ -421,8 +630,10 @@ class Main:
                             self.config["volume"]["bg"] = self.slider_bg.get_current_value() / 100
                             self.config["volume"]["effect"] = self.slider_effect.get_current_value() / 100
                             self.config["closed"]["default"] = [self.tr(i) for i in self.config["closed"]["choices"]].index(self.choice_wclosed.selected_option[0])
+                            self.config["select"]["default"] = [self.tr(i) for i in self.config["select"]["choices"]].index(self.choice_render.selected_option[0])
                             self.config["volume"]["chess"] = self.chk_chessv.is_checked
                             self.config["volume"]["enable"] = self.chk_enable.is_checked
+
                             self.config["lang"]["default"] = list(self.lang_dct.keys())[list(self.lang_dct.values()).index(self.choice_language.selected_option[0])]
                             with open("config/setting.json", "w", encoding="utf-8") as f:
                                 json.dump(self.config, f, indent=4, ensure_ascii=False)
@@ -447,7 +658,27 @@ class Main:
 
                     if event.type == pgui.UI_BUTTON_PRESSED:
                         if event.ui_element == self.btn_back2:
-                            self.page = "home"  
+                            self.page = "home" 
+
+                    get_grid = self.gmk_board.GetGrid(pg.mouse.get_pos())
+                    if get_grid and event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+                        if get_grid not in self.gmk_board.board_lst:
+                            self.gmk_board.board_lst.append(get_grid)
+                            CONSOLE.print(f"[bold red]Human[/bold red][bold green] put at [/bold green]{get_grid}")
+                            if self.config["volume"]["chess"]:
+                                self.playSound("down1")
+
+                    if get_grid:
+                        if get_grid not in self.gmk_board.board_lst:
+                            self.gmk_board.alpha_chess = get_grid
+                        else:
+                            self.gmk_board.alpha_chess = None
+                    else:
+                        self.gmk_board.alpha_chess = None
+
+                if event.type == pgui.UI_BUTTON_PRESSED:
+                    if self.config["volume"]["enable"]:
+                        self.playSound("click1")
 
             self.screen.fill("#ffffff")
 
@@ -488,6 +719,7 @@ class Main:
                     self.slider_effect.show()
                     self.chk_chessv.show()
                     self.chk_enable.show()
+                    self.choice_render.show()
                     self.choice_wclosed.hide()
                     self.screen.blit(pg.font.Font(self.fontpath, 20).render(self.tr("Theme"),True,self.style["fontcolor"]),(20,100))
                     pg.draw.line(self.screen, self.style["fontcolor"], (20,170), (1004,170), 1)
@@ -501,6 +733,8 @@ class Main:
                     self.screen.blit(pg.font.Font(self.fontpath, 24).render(self.tr("Effect Volume")+f" {int(self.slider_effect.get_current_value())}%",True,self.style["fontcolor"]),(520,450))
                     self.screen.blit(pg.font.Font(self.fontpath, 24).render(self.tr("Chess Volume")+f" {self.tr("Enable") if self.chk_chessv.is_checked else self.tr("Disable")}",True,self.style["fontcolor"]),(80,490))
                     self.screen.blit(pg.font.Font(self.fontpath, 24).render(self.tr("Master Volume")+f" {self.tr("Enable") if self.chk_enable.is_checked else self.tr("Disable")}",True,self.style["fontcolor"]),(80,530))
+                    pg.draw.line(self.screen,self.style["fontcolor"],(20,570),(1004,570))
+                    self.screen.blit(pg.font.Font(self.fontpath, 20).render(self.tr("Render"),True,self.style["fontcolor"]),(20,580))
 
                 if self.setting_page == 2:
                     self.choice_language.hide()
@@ -512,6 +746,7 @@ class Main:
                     self.slider_effect.hide()
                     self.chk_chessv.hide()
                     self.chk_enable.hide()
+                    self.choice_render.hide()
                     self.choice_wclosed.show()
                     self.screen.blit(pg.font.Font(self.fontpath, 20).render(self.tr("When the window is closed"),True,self.style["fontcolor"]),(20,100))
                     pg.draw.line(self.screen, self.style["fontcolor"], (20,170), (1004,170), 1)
@@ -523,7 +758,7 @@ class Main:
                 self.playmanager.update(time_delta)
                 self.playmanager.draw_ui(self.screen)
 
-                self.chessboard.draw()
+                self.gmk_board.render()
 
             pg.display.update()
 
@@ -665,8 +900,8 @@ class Main:
             self.settingmanager.get_theme().get_font({"name": self.font_family, "size": "32"})
 
         self.btn_back1 = pgui.elements.UIButton(
-            relative_rect=pg.Rect(10, 10, 100, 60),
-            text=self.tr("← Back"),
+            relative_rect=pg.Rect(10, 10, 40, 40),
+            text="←",
             manager=self.settingmanager,
         )
 
@@ -752,6 +987,13 @@ class Main:
             initial_state=self.config["volume"]["enable"],
         )
 
+        self.choice_render = pgui.elements.UIDropDownMenu(
+            options_list=[self.tr(i) for i in self.config["select"]["choices"]],
+            starting_option=self.tr(self.config["select"]["choices"][self.config["select"]["default"]]),
+            relative_rect=pg.Rect(20, 610, 300, 30),
+            manager=self.settingmanager,
+        )
+
         self.choice_wclosed = pgui.elements.UIDropDownMenu(
             options_list=[self.tr(i) for i in self.config["closed"]["choices"]],
             relative_rect=pg.Rect(20, 130, 300, 30),
@@ -772,8 +1014,14 @@ class Main:
             self.playmanager.get_theme().get_font({"name": self.font_family, "size": "32"})
 
         self.btn_back2 = pgui.elements.UIButton(
-            relative_rect=pg.Rect(10, 10, 100, 60),
-            text=self.tr("← Back"),
+            relative_rect=pg.Rect(10, 10, 40, 40),
+            text="←",
+            manager=self.playmanager,
+        )
+
+        self.btn_clear = pgui.elements.UIButton(
+            relative_rect=pg.Rect(60, 10, 100, 40),
+            text=self.tr("Clear"),
             manager=self.playmanager,
         )
 
@@ -783,125 +1031,6 @@ class Main:
         if text in self.dictionary:
             return self.dictionary[text]
         return text
-    
-    class ChessBoard:
-        """
-        :boardlst: [(1,1),(2,2),(3,3)...] 记录了落子顺序和坐标的有序列表
-        :parent: 父类，用于获取配置信息
-        """
-        def __init__(self, parent, x, y, size):
-            self.parent = parent
-            self.boardlst = []
-            self.board = [[0 for _ in range(15)] for _ in range(15)]
-            self.x = x
-            self.y = y
-            self.size = size
-            self.config = {
-                "bgcolor" : "#dd8800",
-                "border_radius" : 10,
-                "line" : 1,
-                "linecolor" : "#000000",
-                "textcolor" : "#000000",
-                "linewidth" : 2,
-                "blackcolor" : "#000000",
-                "whitecolor" : "#FFFFFF",
-                "latest" : "#ff0000"
-            }
-            self.ind = 0
-            self.sidelen = 30
-            self.chesslength = (self.size - self.sidelen*2) // 14
-            self.drawmode = "latest" # latest只绘制最新一步, steps绘制所有步数, none:不绘制步数
-            CONSOLE.print(f"ChessBoard init, chesslength={self.chesslength}", style="bold green")
-
-        def listToBoard(self):
-            self.board = [[0 for _ in range(15)] for _ in range(15)]
-            if self.boardlst:
-                for k, i in enumerate(self.boardlst):
-                    self.board[i[0]][i[1]] = -1 if k % 2 else 1
-
-        def draw(self):
-            pg.draw.rect(self.parent.screen, self.config["bgcolor"], (self.x, self.y, self.size, self.size), border_radius=self.config["border_radius"])
-            bias = 0
-            for i in range(15):
-                pg.draw.line(self.parent.screen,
-                            self.config["linecolor"],
-                            (self.x + self.sidelen + i * self.chesslength, self.y + self.sidelen),
-                            (self.x + self.sidelen + i * self.chesslength, self.y + self.size - self.sidelen),
-                            self.config["linewidth"]
-                            )
-                
-                pg.draw.line(self.parent.screen,
-                            self.config["linecolor"],
-                            (self.x + self.sidelen, self.y + self.sidelen + i * self.chesslength),
-                            (self.x + self.size - self.sidelen, self.y + self.sidelen + i * self.chesslength),
-                            self.config["linewidth"]
-                            )
-                
-                if not self.ind:
-                    CONSOLE.print(Panel(f"""[bold white]
-(x1,y1):{(self.x + self.sidelen + i * self.chesslength, self.y + self.sidelen)}
-(x2,y2):{(self.x + self.sidelen + i * self.chesslength, self.y + self.size - self.sidelen)}
- 
-(x3,y3):{(self.x + self.sidelen, self.y + self.sidelen + i * self.chesslength)}
-(x4,y4):{(self.x + self.size - self.sidelen, self.y + self.sidelen + i * self.chesslength)}
-[/bold white]""", title=f"range {i+1}"))
-            if not self.ind:self.ind = 1
-                
-            for i, step in enumerate(self.boardlst):
-                xindex, yindex = step
-                pg.draw.circle(
-                    self.parent.screen,
-                    self.config["blackcolor"] if i % 2 == 0 else self.config["whitecolor"],
-                    (self.x + self.sidelen + xindex * self.chesslength, self.y + self.sidelen + yindex * self.chesslength),
-                    self.chesslength // 2
-                )
-                if self.drawmode == "latest":
-                    if i == len(self.boardlst) - 1:
-                        self.parent.screen.blit(pg.font.Font(self.parent.fontpath, self.chesslength).render(
-                                str(i + 1),
-                                True, 
-                                self.config["latest"]
-                            ),
-                            (
-                                self.x + self.sidelen + xindex * self.chesslength - self.chesslength // 4 + bias,
-                                self.y + self.sidelen + yindex * self.chesslength - self.chesslength // 2 + bias
-                            )
-                        )
-                elif self.drawmode == "steps":
-                    self.parent.screen.blit(pg.font.Font(self.parent.fontpath, self.chesslength).render(
-                            str(i + 1),
-                            True, 
-                            self.config["blackcolor"] if i % 2 == 0 else self.config["whitecolor"] if i ==len(self.boardlst) - 1 else self.config["latest"]
-                        ),
-                        (
-                            self.x + self.sidelen + xindex * self.chesslength - self.chesslength // 4 + bias,
-                            self.y + self.sidelen + yindex * self.chesslength - self.chesslength // 2 + bias
-                        )
-                    )
-                        
-
-        def debugPrint(self):
-            tmp_board = [["+" for _ in range(16)] for _ in range(16)]
-            for i in range(15):
-                tmp_board[i][0] = chr(ord("A") + i)
-                tmp_board[15][i+1] = chr(ord("A") + i)
-            tmp_board[15][0] = " "
-            self.listToBoard()
-            CONSOLE.print("ChessBoard2D",style="bold blue")
-            CONSOLE.print("_"*50, style="bold yellow")
-            for i, y in enumerate(self.board):
-                for j, x in enumerate(y):
-                    if x == -1:
-                        tmp_board[i][j+1] = "●"
-                    elif x == 1:
-                        tmp_board[i][j+1] = "○"
-
-            CONSOLE.print("\n".join([" ".join(x) for x in tmp_board]), style="bold white")
-
-            CONSOLE.print("Steps", style="bold blue")
-            CONSOLE.print("_"*50, style="bold yellow")
-            for k, i in enumerate(self.boardlst):
-                CONSOLE.print((f"{k+1} - {"white" if k % 2 else "black"} | {chr(ord('A')+i[0])}{i[1]+1}({chr(ord('A')+i[0])}{chr(ord('A')+i[1])})"), style="bold white")
 
 if __name__ == '__main__':
     if not CheckSingleInstance():

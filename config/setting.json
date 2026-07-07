@@ -7,10 +7,10 @@
         "default": "zh-CN"
     },
     "volume": {
-        "main": 0.0,
-        "bg": 0.0,
-        "effect": 0.0,
-        "chess": true,
+        "main": 1.0,
+        "bg": 1.0,
+        "effect": 1.0,
+        "chess": false,
         "enable": false
     },
     "closed": {
@@ -19,5 +19,13 @@
             "Minimize to System Tray"
         ],
         "default": 0
+    },
+    "select": {
+        "choices": [
+            "Latest Step(Point)",
+            "Latest Step(Number)",
+            "All Steps"
+        ],
+        "default": 2
     }
 }
