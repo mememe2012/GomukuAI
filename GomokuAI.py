@@ -20,6 +20,7 @@ import ctypes.wintypes as wintypes
 import pystray
 from notifypy import Notify
 import zipfile
+import psutil
 
 CONSOLE = Console()
 SIZE = (1024, 768)
@@ -33,7 +34,6 @@ SWP_NOACTIVATE = 0x0010
 SW_RESTORE = 9
 
 def WinMessage(title, message, icon_path=None, app_name="GomokuAI"):
-    return
     notification = Notify()
     notification.title = title
     notification.message = message
@@ -256,6 +256,15 @@ def HideWindow(hwnd):
 def ShowWindow(hwnd):
     ctypes.windll.user32.ShowWindow(hwnd, 5)
 
+def GetMemory(back_var):
+    process = psutil.Process(os.getpid())
+    back_var =  process.memory_info().rss
+
+def ThreadingGetMemory(back_var):
+    thr = threading.Thread(target=lambda : GetMemory(back_var))
+    thr.daemon = True
+    thr.start()
+    
 class GomokuBoard:
     def __init__(self, 
                  screen: pg.Surface, 
@@ -464,11 +473,10 @@ class Main:
         os.makedirs("tmp", exist_ok=True)
         with open("tmp/HWND.key", "w", encoding="utf-8") as f:
             f.write(str(self.hwnd))
-        
         self.gmk_board = GomokuBoard(self.screen, self.fontpath, 10, 70)
-        
         self.loadConfig()
-
+        self.memory = None
+        ThreadingGetMemory(self.memory)
         CONSOLE.print(f"Window HWND={self.hwnd}", style="yellow")
 
     def GetSurfaceSize(self, surface: pg.Surface):
@@ -659,6 +667,10 @@ class Main:
                     if event.type == pgui.UI_BUTTON_PRESSED:
                         if event.ui_element == self.btn_back2:
                             self.page = "home" 
+                        
+                        elif event.ui_element == self.btn_clear:
+                            self.gmk_board.board_lst = []
+                            CONSOLE.print("-"*20+"Board cleared."+"-"*20, style="bold yellow")
 
                     get_grid = self.gmk_board.GetGrid(pg.mouse.get_pos())
                     if get_grid and event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -683,6 +695,9 @@ class Main:
             self.screen.fill("#ffffff")
 
             self.screen.blit(self.bg, (0,0))
+
+            self.blitCenter(LoadFont(self.fontpath, 14).render(self.tr("Memory {}").format(self.memory), True, (0, 0, 0)), (SIZE[0] // 2, 750))
+            CONSOLE.print(f"Memory: {self.memory}")
 
             if self.page == "home":
                 self.GaussianScreen(self.screen, (20, 10, 350, 740), radius=10, border_radius=10, mask_color=self.style["maskcolor"])

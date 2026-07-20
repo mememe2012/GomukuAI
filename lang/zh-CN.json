@@ -51,5 +51,6 @@
     "Latest Step(Point)" : "最新一步(点)",
     "Latest Step(Number)" : "最新一步(序号)",
     "All Steps" : "所有落子",
-    "Clear" : "清空"
+    "Clear" : "清空",
+    "Memory {}" : "内存 {}"
 }

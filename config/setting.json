@@ -1,7 +1,7 @@
 {
     "theme": {
         "default": "dark",
-        "system": true
+        "system": false
     },
     "lang": {
         "default": "zh-CN"

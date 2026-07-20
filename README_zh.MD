@@ -31,10 +31,10 @@ SOFTWARE.
 **https://github.com/mememe2012/GomukuAI**  
 [Github](https://github.com/mememe2012/GomukuAI)
 
-# Software
+# 软件
 ![GomokuAI](icon/icon144.png)
 
-# Requirements
+# 依赖
 ![Pygame](https://img.shields.io/badge/Pygame-blue.svg?style=flat-square)
 ![Pygame-gui](https://img.shields.io/badge/Pygame%20GUI-blue.svg?style=flat-square)
 ![Numpy](https://img.shields.io/badge/Numpy-blue.svg?style=flat-square)
@@ -43,8 +43,8 @@ SOFTWARE.
 ![Pystray](https://img.shields.io/badge/Pystray-blue.svg?style=flat-square)
 ![Notifypy](https://img.shields.io/badge/Notify-blue.svg?style=flat-square)
 
-# Learn More
-## Contributors
+# 了解更多
+## 贡献者
 **https://github.com/mememe2012/GomokuAI/graphs/contributors**  
 [Contributors](https://github.com/mememe2012/GomukuAI/graphs/contributors)  
 1. [mememe2012](https://github.com/mememe2012)  
@@ -53,39 +53,39 @@ SOFTWARE.
 **https://github.com/mememe2012/GomukuAI/blob/main/README.md**  
 [README](https://github.com/mememe2012/GomukuAI/blob/main/README.md)  
 
-## Wiki
+## 维基百科
 **https://github.com/mememe2012/GomukuAI/wiki**  
 [Wiki](https://github.com/mememe2012/GomukuAI/wiki)  
 
-## Issues
+## 议题
 **https://github.com/mememe2012/GomukuAI/issues**  
 [Issues](https://github.com/mememe2012/GomukuAI/issues)  
 
-## Releases
+## 发布
 **https://github.com/mememe2012/GomukuAI/releases**  
 [Releases](https://github.com/mememe2012/GomukuAI/releases)  
 
-# Copyright
-## Background Image
-### Background Image - icon/bg/dark.png & icon/bg/light.png
-**icon/bg/dark.png & icon/bg/light.png** Copyright © mememe2012  
-Made by **Minecraft Java Edition-1.21** Copyright © Mojang AB.  
-- Source Pack - XKRD - v3.5 for 1.20.2~1.21.3: [XKRD](https://modrinth.com/resourcepack/xk-redstone-display)  
-- Source Pack - Faithful 64x - Release 6: [Faithful 64x](https://modrinth.com/resourcepack/faithful-64x)  
-- Shaders - BSL - v8.2.09: [BSL](https://modrinth.com/shader/bsl-shaders)  
+# 版权所有
+## 背景图片
+### 背景图片 - icon/bg/dark.png 和 icon/bg/light.png
+**icon/bg/dark.png 和 icon/bg/light.png** 版权所有 © mememe2012  
+通过 **Minecraft Java Edition-1.21** 制作 版权所有 © Mojang AB.  
+- 资源包 - XKRD - v3.5 for 1.20.2~1.21.3: [XKRD](https://modrinth.com/resourcepack/xk-redstone-display)  
+- 资源包 - Faithful 64x - Release 6: [Faithful 64x](https://modrinth.com/resourcepack/faithful-64x)  
+- 光线追踪 - BSL - v8.2.09: [BSL](https://modrinth.com/shader/bsl-shaders)  
 
-## Background Music(Sound)
-### Wav - sounds/click1.wav & sounds/info1.wav & sounds/down1.wav
-**sounds/click1.wav & sounds/info1.wav & sounds/down1.wav** Copyright © mememe2012  
-Made from **MIDI** files
+## 背景音乐(音效)
+### 波形文件 - sounds/click1.wav、 sounds/info1.wav 和 sounds/down1.wav
+**sounds/click1.wav、 sounds/info1.wav 和 sounds/down1.wav** 版权所有 © mememe2012  
+通过 **MIDI** 文件制作
 
 ### sounds/bgm/bgm-canon.mp3
-Canon - It is a public domain music.
+卡农 - 这是一个公共版权的音乐.
 
 ### sounds/bgm/bgm-bili.mp3
-BiliBili-Song - Copyright © 飞剑 [飞剑](https://space.bilibili.com/2634?spm_id_from=333.337.0.0)  
+Bilibili 入站歌 - 版权所有 © 飞剑 [飞剑](https://space.bilibili.com/2634?spm_id_from=333.337.0.0)  
 
-**If there is any infringement, please contact us for removal.**
+**如有侵权，请联系删除**
 
 ``` GMKAI
      'Y8888888'      '88Y'    'Y88'     'Y8   'Y8'         'Y888Y'         'Y8888Y'  

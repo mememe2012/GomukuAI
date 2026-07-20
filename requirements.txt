@@ -4,4 +4,4 @@ pygame_gui
 Pillow
 rich
 pystray
-notifypy
+notify-py
